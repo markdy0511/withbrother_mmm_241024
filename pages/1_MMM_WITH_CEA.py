@@ -21,13 +21,27 @@ st.set_page_config(
 import insert_logo 
 insert_logo.add_logo("withbrother_logo.png")
 
+@st.cache_data
+def fontRegistered():
+    font_dirs = [os.getcwd() + '/static']
+    font_files = fm.findSystemFonts(fontpaths=font_dirs)
+
+    for font_file in font_files:
+        fm.fontManager.addfont(font_file)
+    fm._load_fontmanager(try_read_cache=False)
+
+
+fontRegistered()
+fontname = "NanumGothic"
+
+plt.rc('font', family=fontname)
 # Find a font that supports Hangul (Korean)
-font_path = os.path.join(os.getcwd(), "static/NanumGothic-Regular.ttf")
+#font_path = os.path.join(os.getcwd(), "static/NanumGothic-Regular.ttf")
 #font_path = "static/NanumGothic-Regular.ttf"
-fontprop = fm.FontProperties(fname=font_path)
+#fontprop = fm.FontProperties(fname=font_path)
 
 # Applying the font
-plt.rcParams['font.family'] = fontprop.get_name()
+#plt.rcParams['font.family'] = fontprop.get_name()
 # The user hasn't provided the dataframe itself, only a screenshot of the headers. 
 # I'll create a sample dataframe based on the visible column names to proceed with plotting.
 
