@@ -10,6 +10,8 @@ import numpy as np
 from scipy.optimize import linprog
 import math
 
+import os
+
 st.set_page_config(
     page_title="Report Assistant_MMM",
     page_icon="🥇",
@@ -20,7 +22,8 @@ import insert_logo
 insert_logo.add_logo("withbrother_logo.png")
 
 # Find a font that supports Hangul (Korean)
-font_path = "static/NanumGothic-Regular.ttf"
+font_path = os.path.join(os.getcwd(), "static/NanumGothic-Regular.ttf")
+#font_path = "static/NanumGothic-Regular.ttf"
 fontprop = fm.FontProperties(fname=font_path)
 
 # Applying the font
