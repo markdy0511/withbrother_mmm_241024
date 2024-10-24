@@ -287,6 +287,7 @@ if data:
         st.session_state.ceac['normalized_ceac_values_per_wtp'] = normalized_ceac_values_per_wtp
 
     else:
+        plt.figure(figsize=(10, 6))
         extracted_probabilities =  st.session_state.ceac['extracted_probabilities']
         wtp = 10
         # 미디어별로 노멀라이즈된 CEAC 그래프 그리기
