@@ -22,6 +22,7 @@ Here are the apps We can use:
 - [x] [T&D Assistant](/T&D_Assistant)
 - [x] [Script Maker](/Script_Maker)
 - [x] [Report Assistant](/Report_Assistant)
+- [x] [Preview MMM](/MMM_WITH_CEA)
 - [ ] [CardNews Reporter](/CardNews_Reporter)
 - [ ] [Combination](/Combination)
 - [ ] [Q&A](/Q&A)
