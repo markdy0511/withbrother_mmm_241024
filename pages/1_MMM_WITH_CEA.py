@@ -97,7 +97,7 @@ with st.sidebar: #원하는 소스를 만드는 곳
     st.sidebar.header('이곳에 데이터를 업로드하세요.')
     
     data = st.file_uploader(
-        "매체 데이터 업로드 (Excel or CSV)",
+        "분석 데이터 업로드 (Excel or CSV)",
         type=['xls','xlsx', 'csv'],
         key="uploader1"
     )
