@@ -372,6 +372,7 @@ if data_icer and data_simul:
         df_merged['추천 예산'] = (result.x).round(0)
         df_merged['기대 매출'] = (df_merged['추천 예산'] * df_merged['revenue_per_budget']).round(0)
         df_merged.loc['합계'] = df_merged.sum()
+        df_merged.loc['합계','매체'] = None
 
         # 결과 출력
         st.write("최적화된 예산 할당 결과를 출력합니다.")
