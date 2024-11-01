@@ -361,7 +361,7 @@ if data_icer and data_simul:
         else:
             upper_cap = math.ceil(total_budget*10/41000000) / 10
         # 경계 조건: 각 채널의 예산은 0 이상이어야 하고, 현재 예산 이상으로는 증가하지 않음
-        bounds = [(0, budget * (1+ceac) * upper_cap) for budget, ceac in df_merged['누적비용'], df_merged['CEAC']]
+        bounds = [(0, budget * (1+ceac) * upper_cap) for budget, ceac in zip(df_merged['누적비용'], df_merged['CEAC'])]
         
         #st.write(c,A,b,bounds)
 
