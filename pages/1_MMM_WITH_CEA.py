@@ -96,19 +96,26 @@ st.title('광고 예산 효율 및 추천(MMM)')
 with st.sidebar: #원하는 소스를 만드는 곳
     st.sidebar.header('이곳에 데이터를 업로드하세요.')
     
-    data = st.file_uploader(
-        "분석 데이터 업로드 (Excel or CSV)",
+    data_icer = st.file_uploader(
+        "매체 데이터 업로드 (Excel or CSV)",
         type=['xls','xlsx', 'csv'],
         key="uploader1"
     )
 
-if data:
+    data_simul = st.file_uploader(
+        "확률 데이터 업로드 (Excel or CSV)",
+        type=['xls','xlsx', 'csv'],
+        key="uploader2"
+    )
+
+if data_icer and data_simul:
     st.header("1. ICER 분석")
     st.write("최저 비용의 매체를 기준으로 비용 효과를 분석합니다. (ICER : Incremental Cost Effectiveness Ratio)")
     with st.spinner("분석 중"):
 
         if st.session_state.icer_df is None:
-            data1 = pd.read_excel('노스페이스_데모_데이터_v3.xlsx')
+            #data1 = pd.read_excel('노스페이스_데모_데이터_v3.xlsx')
+            data1 = pd.read_excel(data_icer)
             df = pd.DataFrame(data1)
 
             df['일자'] = pd.to_datetime(df['일자'])
@@ -134,7 +141,7 @@ if data:
             df_sorted['매출 비중'] = ((df_sorted['누적구매액']/df_sorted['누적구매액'].sum())*100).round(2)
 
             df_final = df_sorted[['매체', '누적비용', 'Incr Cost', '효과', 'Incr Eff', 'ICER', '매출', '매출 비중']]
-            df_final.columns = ['매체', '누적비용', '비용차이', '효과', '효과차이', 'ICER', '매출', '매출 비중']
+            df_final.columns = ['매체', '누적비용', '비용 간 차이', '효과', '효과 간 차이', 'ICER', '매출', '매출 비중']
             st.session_state.icer_df = df_final
             st.session_state.org_df = df
             st.write(df_final)
@@ -143,13 +150,13 @@ if data:
             df = st.session_state.org_df
             st.write(st.session_state.icer_df)
     
-    with st.expander("See Terminologies"):
+    with st.expander("용어 보기"):
         st.write(
             '''
             누적비용 : 해당 기간에 투입한 비용 (원) \n
-            비용차이(Incr cost) : 가장 비용이 적게 투입한 광고 매체의 비용과의 비용 차이 \n
+            비용 간 차이(Incr cost) : 가장 비용이 적게 투입한 광고 매체의 비용과의 비용 차이 \n
             효과 : 광고 노출이 1되었을 때, 얻을 수 있는 금액 효율 \n
-            효과차이(Incr Eff) : 가장 비용이 적게 투입한 광고 매체의 효과와의 효과 차이 \n
+            효과 간 차이(Incr Eff) : 가장 비용이 적게 투입한 광고 매체의 효과와의 효과 차이 \n
             ICER : 효과 1을 올리기 위한 필요 비용 (음수일 경우, 상대적 효과가 없다고 해석) \n
             매출 : 해당 기간에 발생한 매출액 (원) \n
             매출비중 : 전체 매출 중, 각 매체에서 발생한 매출의 비율
@@ -196,7 +203,8 @@ if data:
 
     if st.session_state.ceac is None:
         # Load the probability data
-        df_prob = pd.read_excel("노스페이스_매체별_확률_필터링_v2.xlsx")
+        #df_prob = pd.read_excel("노스페이스_매체별_확률_필터링_v2.xlsx")
+        df_prob = pd.read_excel(data_simul)
 
         # Step 1: Simulate random probabilities for pClick and pPurchase for 10,000 times for each media
 
@@ -353,7 +361,7 @@ if data:
         else:
             upper_cap = math.ceil(total_budget*10/41000000) / 10
         # 경계 조건: 각 채널의 예산은 0 이상이어야 하고, 현재 예산 이상으로는 증가하지 않음
-        bounds = [(0, budget*upper_cap) for budget in df_merged['누적비용']]
+        bounds = [(0, budget * (1+ceac) * upper_cap) for budget, ceac in df_merged['누적비용'], df_merged['CEAC']]
         
         #st.write(c,A,b,bounds)
 
